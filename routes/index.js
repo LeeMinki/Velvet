@@ -4,7 +4,7 @@ const router = express.Router();
 const exec = require('child_process').exec;
 // URL 입력확인 용
 const urlRegex = require('url-regex');
-const check = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
+
 
 /* GET home page. */
 router.get('/', (req, res, next) => {
@@ -27,7 +27,7 @@ router.get('/keyboard', (req, res )=> {
 //카톡 메시지 처리
 router.post('/message',(req, res) => {
     let child;
-
+    const check = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
     let _obj = {
         user_key: req.body.user_key,
         type: req.body.type,
@@ -64,6 +64,7 @@ router.post('/message',(req, res) => {
         } else {
             // 한글일 경우
             if(check.test(_obj.content)) {
+                console.log("한글 요약 들어오니")
                 child = exec("sumy lex-rank --length=3 --language=korean --text=" + "'" + _obj.content + "'", (error, stdout, stderr) => {
                     console.log('stdout: ' + stdout);
                     console.log('stderr: ' + stderr);
