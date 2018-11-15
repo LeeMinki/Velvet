@@ -63,7 +63,7 @@ router.post('/message',(req, res) => {
             // text 요약
         } else {
             // 한글일 경우
-            if(check.test(_obj.content)) {
+            if(check.test(_obj.content.substring(0, 10))) {
                 console.log("한글 요약 들어오니")
                 child = exec("sumy lex-rank --length=3 --language=korean --text=" + '"' + _obj.content + '"', (error, stdout, stderr) => {
                     console.log('stdout: ' + stdout);
@@ -85,7 +85,7 @@ router.post('/message',(req, res) => {
             }
             // 한글 아니면 영어로 처리
             else {
-                child = exec("sumy lex-rank --length=3 --language=english --text=" + '"' + _obj.content + '"', (error, stdout, stderr) => {
+                child = exec("sumy lex-rank --length=3 --language=en --text=" + '"' + _obj.content + '"', (error, stdout, stderr) => {
                     console.log('stdout: ' + stdout);
                     console.log('stderr: ' + stderr);
                     if (error !== null) {
