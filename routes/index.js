@@ -12,16 +12,13 @@ router.get('/', (req, res, next) => {
 });
 
 router.get('/keyboard', (req, res )=> {
-    // 전달할 데이터
     const data = {
-        'type': 'text',
-        'text': '요약을 원하는 URL 입력하셈!'
+        'type': 'buttons',
+        'buttons': ['녹용!']
     };
 
     // JSON 형식으로 응답
-    res.set({
-        'content-type': 'application/json'
-    }).send(JSON.stringify(data));
+    res.json(data);
 });
 
 //카톡 메시지 처리
