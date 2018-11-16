@@ -2,6 +2,9 @@
 
 const line = require('@line/bot-sdk');
 const express = require('express');
+const urlRegex = require('url-regex');
+const exec = require('child_process').exec;
+
 
 // create LINE SDK config from env variables
 const config = {
