@@ -16,10 +16,14 @@ const client = new line.Client(config);
 
 /* GET home page. */
 router.get('/', (req, res, next) => {
-    res.render('index', {title: '녹용'});
+    res.writeHead(200, {'Content-Type' : 'text/html'});
+    res.end('<h1>녹용<h1>');
 });
 
-router.get('/callback', (req, res) => res.end(`I'm listening.`));
+router.get('/callback', (req, res) => {
+    res.writeHead(200, {'Content-Type' : 'text/html'});
+    res.end(`I'm listening.`);
+});
 
 // register a webhook handler with middleware
 // about the middleware, please refer to doc
