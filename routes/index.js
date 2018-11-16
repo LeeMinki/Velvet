@@ -17,7 +17,7 @@ const client = new line.Client(config);
 /* GET home page. */
 router.get('/', (req, res, next) => {
     res.writeHead(200, {'Content-Type' : 'text/html'});
-    res.end('<h1>녹용<h1>');
+    res.end('<h1>Velvet<h1>');
 });
 
 router.post('/', (req, res, next) => {
