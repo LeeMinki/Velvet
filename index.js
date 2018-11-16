@@ -82,7 +82,7 @@ function handleEvent(event) {
       }
   }
   // create a echoing text message
-  const ret_msg = { type: 'text', text: text };
+  const ret_msg = { type: 'text', text: res_text };
 
   // use reply API
   return client.replyMessage(event.replyToken, ret_msg);
