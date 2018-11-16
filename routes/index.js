@@ -20,6 +20,11 @@ router.get('/', (req, res, next) => {
     res.end('<h1>녹용<h1>');
 });
 
+router.post('/', (req, res, next) => {
+    res.writeHead(200, {'Content-Type' : 'text/html'});
+    res.end('<h1>녹용<h1>');
+});
+
 router.get('/callback', (req, res) => {
     res.writeHead(200, {'Content-Type' : 'text/html'});
     res.end(`I'm listening.`);
