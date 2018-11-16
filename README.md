@@ -1,2 +1,4 @@
 # Velvet
-Text Summarization by kakaobot
+Text Summarization by ~~kakaobot~~
+
+-> **LINE**
