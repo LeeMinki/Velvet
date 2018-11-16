@@ -24,14 +24,21 @@ router.get('/callback', (req, res) => res.end(`I'm listening.`));
 // register a webhook handler with middleware
 // about the middleware, please refer to doc
 router.post('/callback', line.middleware(config), (req, res) => {
-    Promise
-        .all(req.body.events.map(handleEvent))
-        .then((result) => res.json(result))
+    // req.body.events should be an array of events
+    if (!Array.isArray(req.body.events)) {
+        console.log("왜 500뜨냐 여기냐11");
+        return res.status(500).end();
+    }
+    / handle events separately
+    Promise.all(req.body.events.map(handleEvent))
+        .then(() => res.end())
         .catch((err) => {
             console.error(err);
+            console.log("왜 500뜨냐 여기냐12222");
             res.status(500).end();
         });
 });
+
 
 // simple reply function
 const replyText = (token, texts) => {
