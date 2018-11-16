@@ -38,6 +38,7 @@ router.post('/callback', line.middleware(config), (req, res) => {
         console.log("왜 500뜨냐 여기냐11");
         return res.status(500).end();
     }
+    console.log("보이루");
     // handle events separately
     Promise.all(req.body.events.map(handleEvent))
         .then(() => res.end())
