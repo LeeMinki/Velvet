@@ -41,9 +41,11 @@ function handleEvent(event) {
 
     //라인으로 받은 메시지
     console.log(event.message.text);
+    console.log(event.message.text.substring(0));
+    console.log(event.message.text.substring(1,7));
     // 업데이트 명령어 확인
     if (event.message.text.substring(0) === "!") {
-        if (event.message.text.substring(1, 6) === "update") {
+        if (event.message.text.substring(1, 7) === "update") {
             exec("cd /home/ubuntu/sumy && git pull", (error, stdout, stderr) => {
                 console.log('stdout: ' + stdout);
                 console.log('stderr: ' + stderr);
@@ -60,7 +62,6 @@ function handleEvent(event) {
     // url 요약
     if (urlRegex({ exact: true, strict: false }).test(event.message.text)) {
         if (event.message.text.substring(0, 4) !== "http") {
-            // text 요약
             vent.message.text = "http://" + event.message.text;
         }
         exec("sumy lex-rank --length=10 --url=" + event.message.text, (error, stdout, stderr) => {
