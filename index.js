@@ -41,10 +41,27 @@ function handleEvent(event) {
 
     //라인으로 받은 메시지
     console.log(event.message.text);
+    // 업데이트 명령어 확인
+    if (event.message.text[0] === "!") {
+        if (event.message.text.substring(1, 6) === "update") {
+            exec("cd /home/ubuntu/sumy && git pull") {
+                console.log('stdout: ' + stdout);
+                console.log('stderr: ' + stderr);
+                if (error !== null) {
+                    console.log('exec error: ' + error);
+                }
+                res_text = stdout;
+                // create a echoing text message
+                let ret_msg = { type: 'text', text: res_text };
+                return client.replyMessage(event.replyToken, ret_msg);
+            }
+        }
+    }
     // url 요약
     if (urlRegex({ exact: true, strict: false }).test(event.message.text)) {
         if (event.message.text.substring(0, 4) !== "http") {
-            event.message.text = "http://" + event.message.text;
+            // text 요약
+            vent.message.text = "http://" + event.message.text;
         }
         exec("sumy lex-rank --length=10 --url=" + event.message.text, (error, stdout, stderr) => {
             console.log('stdout: ' + stdout);
@@ -57,9 +74,9 @@ function handleEvent(event) {
             let ret_msg = { type: 'text', text: res_text };
             return client.replyMessage(event.replyToken, ret_msg);
 
-            // text 요약
         });
     } else {
+        // text 요약
         // 한글일 경우
         if (check.test(event.message.text.substring(0, 10))) {
             console.log("한글 요약 들어오니")
