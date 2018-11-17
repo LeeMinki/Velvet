@@ -42,7 +42,7 @@ function handleEvent(event) {
     //라인으로 받은 메시지
     console.log(event.message.text);
     // 업데이트 명령어 확인
-    if (event.message.text[0] === "!") {
+    if (event.message.text.substring(0) === "!") {
         if (event.message.text.substring(1, 6) === "update") {
             exec("cd /home/ubuntu/sumy && git pull", (error, stdout, stderr) => {
                 console.log('stdout: ' + stdout);
