@@ -44,7 +44,7 @@ function handleEvent(event) {
     // 업데이트 명령어 확인
     if (event.message.text[0] === "!") {
         if (event.message.text.substring(1, 6) === "update") {
-            exec("cd /home/ubuntu/sumy && git pull") {
+            exec("cd /home/ubuntu/sumy && git pull", (error, stdout, stderr) => {
                 console.log('stdout: ' + stdout);
                 console.log('stderr: ' + stderr);
                 if (error !== null) {
@@ -54,7 +54,7 @@ function handleEvent(event) {
                 // create a echoing text message
                 let ret_msg = { type: 'text', text: res_text };
                 return client.replyMessage(event.replyToken, ret_msg);
-            }
+            });
         }
     }
     // url 요약
