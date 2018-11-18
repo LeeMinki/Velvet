@@ -65,7 +65,7 @@ function handleEvent(event) {
                 if (error !== null) {
                     console.log('exec error: ' + error);
                 }
-                res_text = stdout;
+                res_text = "업데이트 완료";
                 // create a echoing text message
                 let ret_msg = { type: 'text', text: res_text };
                 return client.replyMessage(event.replyToken, ret_msg);
