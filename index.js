@@ -52,6 +52,12 @@ function handleEvent(event) {
     console.log(event.message.text);
     // 업데이트 명령어 확인
     if (event.message.text.substring(0, 1) === "!") {
+        if(event.message.text.substring(1,5) === "help") {
+            res_text = "algo=luhn, edmundson, lsa, text-rank, lex-rank, sum-basic, kl \nlength={number}";
+            // create a echoing text message
+            let ret_msg = { type: 'text', text: res_text };
+            return client.replyMessage(event.replyToken, ret_msg);
+        }
         if (event.message.text.substring(1, 7) === "update") {
             exec("cd /home/ubuntu/sumy && git pull", (error, stdout, stderr) => {
                 console.log('stdout: ' + stdout);
@@ -70,8 +76,8 @@ function handleEvent(event) {
                     algorithm = algor_select[i];
                 }
             }
-        } else if(event.message.text.substring(1,5) === "len=") {
-            length = event.message.text.substring(5);
+        } else if(event.message.text.substring(1,8) === "length=") {
+            length = event.message.text.substring(8);
         }
     }
     // url 요약
@@ -79,7 +85,7 @@ function handleEvent(event) {
         if (event.message.text.substring(0, 4) !== "http") {
             event.message.text = "http://" + event.message.text;
         }
-        exec("sumy" + algorithm +  "lex-rank --length=" + length + "--url=" + event.message.text, (error, stdout, stderr) => {
+        exec("sumy " + algorithm +  " --length=" + length + " --url=" + event.message.text, (error, stdout, stderr) => {
             console.log('stdout: ' + stdout);
             console.log('stderr: ' + stderr);
             if (error !== null) {
@@ -96,7 +102,7 @@ function handleEvent(event) {
         // 한글일 경우
         if (check.test(event.message.text.substring(0, 10))) {
             console.log("한글 요약 들어오니")
-            exec("sumy" + algorithm + "--length=" + length + "--language=korean --text=" + '"' + event.message.text + '"', (error, stdout, stderr) => {
+            exec("sumy " + algorithm + " --length=" + length + " --language=korean --text=" + '"' + event.message.text + '"', (error, stdout, stderr) => {
                 console.log('stdout: ' + stdout);
                 console.log('stderr: ' + stderr);
                 if (error !== null) {
@@ -110,7 +116,7 @@ function handleEvent(event) {
         }
         // 한글 아니면 영어로 처리
         else {
-            exec("sumy" + algorithm + "--length=" + length + "--language=en --text=" + '"' + event.message.text + '"', (error, stdout, stderr) => {
+            exec("sumy " + algorithm + " --length=" + length + " --language=en --text=" + '"' + event.message.text + '"', (error, stdout, stderr) => {
                 console.log('stdout: ' + stdout);
                 console.log('stderr: ' + stderr);
                 if (error !== null) {
