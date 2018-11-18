@@ -32,6 +32,12 @@ app.post('/callback', line.middleware(config), (req, res) => {
 // event handler
 function handleEvent(event) {
     if (event.type !== 'message' || event.message.type !== 'text') {
+
+        // 큰 따옴표 없애기
+        for (let i in event.message.type) {
+            if(event.message.type[i] === '"')
+                event.message.type[i] = "'"
+        }
         // ignore non-text-message event
         return Promise.resolve(null);
     }
