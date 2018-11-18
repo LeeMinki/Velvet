@@ -4,7 +4,9 @@ const line = require('@line/bot-sdk');
 const express = require('express');
 const urlRegex = require('url-regex');
 const exec = require('child_process').exec;
-
+let algorithm = "lex-rank";
+const algor_select= ["luhn" , "edmundson ", "lsa", "text-rank", "lex-rank", "sum-basic", "kl"];
+let length = "10";
 
 // create LINE SDK config from env variables
 const config = {
@@ -38,6 +40,7 @@ function handleEvent(event) {
             if(event.message.type[i] === '"')
                 event.message.type[i] = "'"
         }
+
         // ignore non-text-message event
         return Promise.resolve(null);
     }
@@ -61,6 +64,14 @@ function handleEvent(event) {
                 let ret_msg = { type: 'text', text: res_text };
                 return client.replyMessage(event.replyToken, ret_msg);
             });
+        } else if(event.message.text.substring(1,11) === "algorithm=") {
+            for(let i in algor_select) {
+                if(algor_select[i] === event.message.text.substring(11)) {
+                    algorithm = algor_select[i];
+                }
+            }
+        } else if(event.message.text.substring(1,5) === "len=") {
+            length = event.message.text.substring(5);
         }
     }
     // url 요약
@@ -68,7 +79,7 @@ function handleEvent(event) {
         if (event.message.text.substring(0, 4) !== "http") {
             event.message.text = "http://" + event.message.text;
         }
-        exec("sumy lex-rank --length=10 --url=" + event.message.text, (error, stdout, stderr) => {
+        exec("sumy" + algorithm +  "lex-rank --length=" + length + "--url=" + event.message.text, (error, stdout, stderr) => {
             console.log('stdout: ' + stdout);
             console.log('stderr: ' + stderr);
             if (error !== null) {
@@ -85,7 +96,7 @@ function handleEvent(event) {
         // 한글일 경우
         if (check.test(event.message.text.substring(0, 10))) {
             console.log("한글 요약 들어오니")
-            exec("sumy lex-rank --length=3 --language=korean --text=" + '"' + event.message.text + '"', (error, stdout, stderr) => {
+            exec("sumy" + algorithm + "--length=" + length + "--language=korean --text=" + '"' + event.message.text + '"', (error, stdout, stderr) => {
                 console.log('stdout: ' + stdout);
                 console.log('stderr: ' + stderr);
                 if (error !== null) {
@@ -99,7 +110,7 @@ function handleEvent(event) {
         }
         // 한글 아니면 영어로 처리
         else {
-            exec("sumy lex-rank --length=3 --language=en --text=" + '"' + event.message.text + '"', (error, stdout, stderr) => {
+            exec("sumy" + algorithm + "--length=" + length + "--language=en --text=" + '"' + event.message.text + '"', (error, stdout, stderr) => {
                 console.log('stdout: ' + stdout);
                 console.log('stderr: ' + stderr);
                 if (error !== null) {
