@@ -99,8 +99,13 @@ function handleEvent(event) {
         });
     } else {
         // text 요약
+        if(event.message.text.length <= 1000) {
+            res_text = "1000자 이상 입력하세요!";
+            let ret_msg = { type: 'text', text: res_text };
+            return client.replyMessage(event.replyToken, ret_msg);
+        }
         // 한글일 경우
-        if (check.test(event.message.text.substring(0, 10))) {
+        else if (check.test(event.message.text.substring(0, 10))) {
             console.log("한글 요약 들어오니")
             exec("sumy " + algorithm + " --length=" + length + " --language=korean --text=" + '"' + event.message.text + '"', (error, stdout, stderr) => {
                 console.log('stdout: ' + stdout);
