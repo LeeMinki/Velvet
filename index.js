@@ -53,7 +53,7 @@ function handleEvent(event) {
     // 업데이트 명령어 확인
     if (event.message.text.substring(0, 1) === "!") {
         if(event.message.text.substring(1,5) === "help") {
-            res_text = "algo=luhn, edmundson, lsa, text-rank, lex-rank, sum-basic, kl \nlength={number}";
+            res_text = "algorithm=luhn, edmundson, lsa, text-rank, lex-rank, sum-basic, kl \n\nlength={number}";
             // create a echoing text message
             let ret_msg = { type: 'text', text: res_text };
             return client.replyMessage(event.replyToken, ret_msg);
