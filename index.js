@@ -34,19 +34,19 @@ app.post('/callback', line.middleware(config), (req, res) => {
 // event handler
 function handleEvent(event) {
     if (event.type !== 'message' || event.message.type !== 'text') {
-
-        // 큰 따옴표 없애기
-        for (let i in event.message.text) {
-            if(event.message.text[i] === '"')
-                event.message.text[i] = "'";
-        }
-
         // ignore non-text-message event
         return Promise.resolve(null);
     }
     let child;
     let res_text;
     const check = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
+
+
+    // 큰 따옴표 없애기
+    for (let i in event.message.text) {
+        if(event.message.text[i] === '"')
+            event.message.text[i] = "'";
+    }
 
     //라인으로 받은 메시지
     console.log(event.message.text);
