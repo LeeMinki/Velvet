@@ -49,51 +49,62 @@ function handleEvent(event) {
     // file event(pdf)
 
     if(event.message.type === 'file') {
-        console.log("lovebombombombom")
-        const picStream = fs.createWriteStream(filePath);
-        event.message.file.pipe(picStream);
+        console.log("lovebombombombom");
+        const pdfStream = fs.createWriteStream(filePath);
+        // event.message.file.pipe(picStream);
+        client.getMessageContent(event.message.file.id)
+            .then((stream) => {
+                stream.on('data', (chunk) => {
+                    pdfStream.write(chunk);
+                    pdfStream.end();
+                });
+                stream.on('error', (err) => {
+                    console.log(err);
+                });
+                stream.on('finish', () => {
+                    // 파일 저장했으니 pdf 추출
 
-        // 파일 저장했으니 pdf 추출
-        picStream.on('finish', () => {
-            extract(filePath, { splitPages: false }, function (err, text) {
-                if (err) {
-                    console.dir(err)
-                    return
-                }
-                // 추출한 text로 text 요약
+                    extract(filePath, { splitPages: false }, function (err, text) {
+                        if (err) {
+                            console.dir(err);
+                            return;
+                        }
+                        // 추출한 text로 text 요약
 
-                // text 요약
-                // 한글일 경우
-                else if (check.test(event.message.text.substring(0, 10))) {
-                    console.log("한글 요약 들어오니");
-                    exec("sumy " + algorithm + " --length=" + length + " --language=korean --text=" + '"' + text + '"', (error, stdout, stderr) => {
-                        console.log('stdout: ' + stdout);
-                        console.log('stderr: ' + stderr);
-                        if (error !== null) {
-                            console.log('exec error: ' + error);
+                        // text 요약
+                        // 한글일 경우
+                        else if (check.test(event.message.text.substring(0, 10))) {
+                            console.log("한글 요약 들어오니");
+                            exec("sumy " + algorithm + " --length=" + length + " --language=korean --text=" + '"' + text + '"', (error, stdout, stderr) => {
+                                console.log('stdout: ' + stdout);
+                                console.log('stderr: ' + stderr);
+                                if (error !== null) {
+                                    console.log('exec error: ' + error);
+                                }
+                                res_text = stdout;
+                                // create a echoing text message
+                                let ret_msg = {type: 'text', text: res_text};
+                                return client.replyMessage(event.replyToken, ret_msg);
+                            });
                         }
-                        res_text = stdout;
-                        // create a echoing text message
-                        let ret_msg = {type: 'text', text: res_text};
-                        return client.replyMessage(event.replyToken, ret_msg);
-                    });
-                }
-                // 한글 아니면 영어로 처리
-                else {
-                    exec("sumy " + algorithm + " --length=" + length + " --language=en --text=" + '"' + text + '"', (error, stdout, stderr) => {
-                        console.log('stdout: ' + stdout);
-                        console.log('stderr: ' + stderr);
-                        if (error !== null) {
-                            console.log('exec error: ' + error);
+                        // 한글 아니면 영어로 처리
+                        else {
+                            exec("sumy " + algorithm + " --length=" + length + " --language=en --text=" + '"' + text + '"', (error, stdout, stderr) => {
+                                console.log('stdout: ' + stdout);
+                                console.log('stderr: ' + stderr);
+                                if (error !== null) {
+                                    console.log('exec error: ' + error);
+                                }
+                                res_text = stdout;
+                                // create a echoing text message
+                                let ret_msg = {type: 'text', text: res_text};
+                                return client.replyMessage(event.replyToken, ret_msg);
+                            });
                         }
-                        res_text = stdout;
-                        // create a echoing text message
-                        let ret_msg = {type: 'text', text: res_text};
-                        return client.replyMessage(event.replyToken, ret_msg);
-                    });
-                }
-            })
-        });
+                    })
+
+                })
+            });
     }
 
     // text event
