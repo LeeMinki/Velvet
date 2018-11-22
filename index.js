@@ -37,8 +37,8 @@ function handleEvent(event) {
 
         // 큰 따옴표 없애기
         for (let i in event.message.type) {
-            if(event.message.type[i] === '"')
-                event.message.type[i] = "'"
+            if(event.message.text[i] === '"')
+                event.message.text[i] = "'";
         }
 
         // ignore non-text-message event
@@ -106,7 +106,7 @@ function handleEvent(event) {
         }
         // 한글일 경우
         else if (check.test(event.message.text.substring(0, 10))) {
-            console.log("한글 요약 들어오니")
+            console.log("한글 요약 들어오니");
             exec("sumy " + algorithm + " --length=" + length + " --language=korean --text=" + '"' + event.message.text + '"', (error, stdout, stderr) => {
                 console.log('stdout: ' + stdout);
                 console.log('stderr: ' + stderr);
