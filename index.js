@@ -42,11 +42,12 @@ function handleEvent(event) {
     const check = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
 
 
-    // 큰 따옴표 없애기
-    for (let i in event.message.text) {
-        if(event.message.text[i] === '"')
-            event.message.text[i] = "'";
-    }
+    // 큰 따옴표를 작은 따옴표로
+    // for (let i in event.message.text) {
+    //     if(event.message.text[i] === '"')
+    //         event.message.text[i] = "'";
+    // }
+    event.message.text.replace(/"/gi, "'");
 
     //라인으로 받은 메시지
     console.log(event.message.text);
