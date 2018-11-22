@@ -37,7 +37,7 @@ function handleEvent(event) {
         // ignore non-text-message event
         return Promise.resolve(null);
     }
-    let child;
+
     let res_text;
     const check = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
 
@@ -47,7 +47,7 @@ function handleEvent(event) {
     //     if(event.message.text[i] === '"')
     //         event.message.text[i] = "'";
     // }
-    event.message.text.replace(/\"/gi, "'");
+    event.message.text = event.message.text.replace(/\"/gi, "'");
 
     //라인으로 받은 메시지
     console.log(event.message.text);
