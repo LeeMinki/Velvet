@@ -47,7 +47,9 @@ function handleEvent(event) {
     let res_text;
     const check = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
     // file event(pdf)
-    if(event.message.type === 'file' && event.message.fileName.substring(event.message.fileName.length -4, event.message.fileName.length -1) === '.pdf') {
+
+    if(event.message.type === 'file') {
+        console.log("lovebombombombom")
         const picStream = fs.createWriteStream(filePath);
         event.message.file.pipe(picStream);
 
