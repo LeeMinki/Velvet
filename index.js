@@ -36,7 +36,7 @@ function handleEvent(event) {
     if (event.type !== 'message' || event.message.type !== 'text') {
 
         // 큰 따옴표 없애기
-        for (let i in event.message.type) {
+        for (let i in event.message.text) {
             if(event.message.text[i] === '"')
                 event.message.text[i] = "'";
         }
