@@ -47,7 +47,7 @@ function handleEvent(event) {
     //     if(event.message.text[i] === '"')
     //         event.message.text[i] = "'";
     // }
-    event.message.text.replace(/"/gi, "'");
+    event.message.text.replace(/\"/gi, "'");
 
     //라인으로 받은 메시지
     console.log(event.message.text);
