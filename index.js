@@ -1,12 +1,18 @@
 'use strict';
 
 const line = require('@line/bot-sdk');
+const path = require('path');
 const express = require('express');
 const urlRegex = require('url-regex');
 const exec = require('child_process').exec;
-let algorithm = "lex-rank";
+const filePath = path.join(__dirname, 'pdf/text.pdf')
+const extract = require('pdf-text-extract');
+const fs = require('fs');
+
 const algor_select= ["luhn" , "edmundson ", "lsa", "text-rank", "lex-rank", "sum-basic", "kl"];
+let algorithm = "lex-rank";
 let length = "10";
+
 
 // create LINE SDK config from env variables
 const config = {
@@ -33,82 +39,108 @@ app.post('/callback', line.middleware(config), (req, res) => {
 
 // event handler
 function handleEvent(event) {
-    if (event.type !== 'message' || event.message.type !== 'text') {
-        // ignore non-text-message event
+    if (event.type !== 'message' || (event.message.type !== 'text'&&event.message.type !== 'file')) {
+        // ignore non-text-message event, file event
         return Promise.resolve(null);
     }
 
     let res_text;
     const check = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
+    // file event(pdf)
+    if(event.message.type === 'file' && event.message.fileName.substring(event.message.fileName.length -4, event.message.fileName.length -1) === '.pdf') {
+        const picStream = fs.createWriteStream(filePath);
+        event.message.file.pipe(picStream);
 
-
-    // 큰 따옴표를 작은 따옴표로
-    // for (let i in event.message.text) {
-    //     if(event.message.text[i] === '"')
-    //         event.message.text[i] = "'";
-    // }
-    event.message.text = event.message.text.replace(/\"/gi, "'");
-
-    //라인으로 받은 메시지
-    console.log(event.message.text);
-    // 업데이트 명령어 확인
-    if (event.message.text.substring(0, 1) === "!") {
-        if(event.message.text.substring(1,5) === "help") {
-            res_text = "algorithm=luhn, edmundson, lsa, text-rank, lex-rank, sum-basic, kl \n\nlength={number}";
-            // create a echoing text message
-            let ret_msg = { type: 'text', text: res_text };
-            return client.replyMessage(event.replyToken, ret_msg);
-        }
-        if (event.message.text.substring(1, 7) === "update") {
-            exec("cd /home/ubuntu/sumy&&git pull&&python3 setup.py install", (error, stdout, stderr) => {
-                console.log('stdout: ' + stdout);
-                console.log('stderr: ' + stderr);
-                if (error !== null) {
-                    console.log('exec error: ' + error);
+        // 파일 저장했으니 pdf 추출
+        picStream.on('finish', () => {
+            extract(filePath, { splitPages: false }, function (err, text) {
+                if (err) {
+                    console.dir(err)
+                    return
                 }
-                res_text = "업데이트 완료";
-                // create a echoing text message
-                let ret_msg = { type: 'text', text: res_text };
-                return client.replyMessage(event.replyToken, ret_msg);
-            });
-        } else if(event.message.text.substring(1,11) === "algorithm=") {
-            for(let i in algor_select) {
-                if(algor_select[i] === event.message.text.substring(11)) {
-                    algorithm = algor_select[i];
-                }
-            }
-        } else if(event.message.text.substring(1,8) === "length=") {
-            length = event.message.text.substring(8);
-        }
-    }
-    // url 요약
-    else if (urlRegex({ exact: true, strict: false }).test(event.message.text)) {
-        if (event.message.text.substring(0, 4) !== "http") {
-            event.message.text = "http://" + event.message.text;
-        }
-        exec("sumy " + algorithm +  " --length=" + length + " --url=" + event.message.text, (error, stdout, stderr) => {
-            console.log('stdout: ' + stdout);
-            console.log('stderr: ' + stderr);
-            if (error !== null) {
-                console.log('exec error: ' + error);
-            }
-            res_text = stdout;
-            // create a echoing text message
-            let ret_msg = { type: 'text', text: res_text };
-            return client.replyMessage(event.replyToken, ret_msg);
+                // 추출한 text로 text 요약
 
+                // text 요약
+                // 한글일 경우
+                else if (check.test(event.message.text.substring(0, 10))) {
+                    console.log("한글 요약 들어오니");
+                    exec("sumy " + algorithm + " --length=" + length + " --language=korean --text=" + '"' + text + '"', (error, stdout, stderr) => {
+                        console.log('stdout: ' + stdout);
+                        console.log('stderr: ' + stderr);
+                        if (error !== null) {
+                            console.log('exec error: ' + error);
+                        }
+                        res_text = stdout;
+                        // create a echoing text message
+                        let ret_msg = {type: 'text', text: res_text};
+                        return client.replyMessage(event.replyToken, ret_msg);
+                    });
+                }
+                // 한글 아니면 영어로 처리
+                else {
+                    exec("sumy " + algorithm + " --length=" + length + " --language=en --text=" + '"' + text + '"', (error, stdout, stderr) => {
+                        console.log('stdout: ' + stdout);
+                        console.log('stderr: ' + stderr);
+                        if (error !== null) {
+                            console.log('exec error: ' + error);
+                        }
+                        res_text = stdout;
+                        // create a echoing text message
+                        let ret_msg = {type: 'text', text: res_text};
+                        return client.replyMessage(event.replyToken, ret_msg);
+                    });
+                }
+            })
         });
-    } else {
-        // text 요약
-        if(event.message.text.length <= 500) {
-            res_text = "500자 이상 입력하세요!";
-            let ret_msg = { type: 'text', text: res_text };
-            return client.replyMessage(event.replyToken, ret_msg);
+    }
+
+    // text event
+    else {
+        // 큰 따옴표를 작은 따옴표로
+        // for (let i in event.message.text) {
+        //     if(event.message.text[i] === '"')
+        //         event.message.text[i] = "'";
+        // }
+        event.message.text = event.message.text.replace(/\"/gi, "'");
+
+        //라인으로 받은 메시지
+        console.log(event.message.text);
+        // 업데이트 명령어 확인
+        if (event.message.text.substring(0, 1) === "!") {
+            if (event.message.text.substring(1, 5) === "help") {
+                res_text = "algorithm=luhn, edmundson, lsa, text-rank, lex-rank, sum-basic, kl \n\nlength={number}";
+                // create a echoing text message
+                let ret_msg = {type: 'text', text: res_text};
+                return client.replyMessage(event.replyToken, ret_msg);
+            }
+            if (event.message.text.substring(1, 7) === "update") {
+                exec("cd /home/ubuntu/sumy&&git pull&&python3 setup.py install", (error, stdout, stderr) => {
+                    console.log('stdout: ' + stdout);
+                    console.log('stderr: ' + stderr);
+                    if (error !== null) {
+                        console.log('exec error: ' + error);
+                    }
+                    res_text = "업데이트 완료";
+                    // create a echoing text message
+                    let ret_msg = {type: 'text', text: res_text};
+                    return client.replyMessage(event.replyToken, ret_msg);
+                });
+            } else if (event.message.text.substring(1, 11) === "algorithm=") {
+                for (let i in algor_select) {
+                    if (algor_select[i] === event.message.text.substring(11)) {
+                        algorithm = algor_select[i];
+                    }
+                }
+            } else if (event.message.text.substring(1, 8) === "length=") {
+                length = event.message.text.substring(8);
+            }
         }
-        // 한글일 경우
-        else if (check.test(event.message.text.substring(0, 10))) {
-            console.log("한글 요약 들어오니");
-            exec("sumy " + algorithm + " --length=" + length + " --language=korean --text=" + '"' + event.message.text + '"', (error, stdout, stderr) => {
+        // url 요약
+        else if (urlRegex({exact: true, strict: false}).test(event.message.text)) {
+            if (event.message.text.substring(0, 4) !== "http") {
+                event.message.text = "http://" + event.message.text;
+            }
+            exec("sumy " + algorithm + " --length=" + length + " --url=" + event.message.text, (error, stdout, stderr) => {
                 console.log('stdout: ' + stdout);
                 console.log('stderr: ' + stderr);
                 if (error !== null) {
@@ -116,23 +148,46 @@ function handleEvent(event) {
                 }
                 res_text = stdout;
                 // create a echoing text message
-                let ret_msg = { type: 'text', text: res_text };
+                let ret_msg = {type: 'text', text: res_text};
                 return client.replyMessage(event.replyToken, ret_msg);
+
             });
-        }
-        // 한글 아니면 영어로 처리
-        else {
-            exec("sumy " + algorithm + " --length=" + length + " --language=en --text=" + '"' + event.message.text + '"', (error, stdout, stderr) => {
-                console.log('stdout: ' + stdout);
-                console.log('stderr: ' + stderr);
-                if (error !== null) {
-                    console.log('exec error: ' + error);
-                }
-                res_text = stdout;
-                // create a echoing text message
-                let ret_msg = { type: 'text', text: res_text };
+        } else {
+            // text 요약
+            if (event.message.text.length <= 500) {
+                res_text = "500자 이상 입력하세요!";
+                let ret_msg = {type: 'text', text: res_text};
                 return client.replyMessage(event.replyToken, ret_msg);
-            });
+            }
+            // 한글일 경우
+            else if (check.test(event.message.text.substring(0, 10))) {
+                console.log("한글 요약 들어오니");
+                exec("sumy " + algorithm + " --length=" + length + " --language=korean --text=" + '"' + event.message.text + '"', (error, stdout, stderr) => {
+                    console.log('stdout: ' + stdout);
+                    console.log('stderr: ' + stderr);
+                    if (error !== null) {
+                        console.log('exec error: ' + error);
+                    }
+                    res_text = stdout;
+                    // create a echoing text message
+                    let ret_msg = {type: 'text', text: res_text};
+                    return client.replyMessage(event.replyToken, ret_msg);
+                });
+            }
+            // 한글 아니면 영어로 처리
+            else {
+                exec("sumy " + algorithm + " --length=" + length + " --language=en --text=" + '"' + event.message.text + '"', (error, stdout, stderr) => {
+                    console.log('stdout: ' + stdout);
+                    console.log('stderr: ' + stderr);
+                    if (error !== null) {
+                        console.log('exec error: ' + error);
+                    }
+                    res_text = stdout;
+                    // create a echoing text message
+                    let ret_msg = {type: 'text', text: res_text};
+                    return client.replyMessage(event.replyToken, ret_msg);
+                });
+            }
         }
     }
 }
