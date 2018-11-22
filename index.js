@@ -52,7 +52,7 @@ function handleEvent(event) {
         console.log("lovebombombombom");
         const pdfStream = fs.createWriteStream(filePath);
         // event.message.file.pipe(picStream);
-        client.getMessageContent(event.message.file.id)
+        client.getMessageContent(event.message.id)
             .then((stream) => {
                 stream.on('data', (chunk) => {
                     pdfStream.write(chunk);
