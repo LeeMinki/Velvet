@@ -39,7 +39,7 @@ app.post('/callback', line.middleware(config), (req, res) => {
 
 // event handler
 function handleEvent(event) {
-    if (event.type !== 'message' || (event.message.type !== 'text'&&event.message.type !== 'file')) {
+    if (event.type !== 'message' || (event.message.type !== 'text' && event.message.type !== 'file')) {
         // ignore non-text-message event, file event
         return Promise.resolve(null);
     }
@@ -48,7 +48,7 @@ function handleEvent(event) {
     const check = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
     // file event(pdf)
 
-    if(event.message.type === 'file') {
+    if (event.message.type === 'file') {
         console.log("lovebombombombom");
         const pdfStream = fs.createWriteStream(filePath);
         client.getMessageContent(event.message.id)
@@ -58,16 +58,17 @@ function handleEvent(event) {
                 }).on('end', () => {
                     // 파일 저장했으니 pdf 추출
                     console.log("lovebombombombomdddaaa");
-                    extract(filePath, { splitPages: false }, (err, text) => {
+                    extract(filePath, {splitPages: false}, (err, text) => {
                         if (err) {
                             console.dir(err);
                             return;
                         }
                         // 추출한 text로 text 요약
                         console.log(text);
+
                         // text 요약
                         // 한글일 경우
-                        else if (check.test(text.substring(0, 10))) {
+                        if (check.test(text.substring(0, 10))) {
                             console.log("한글 요약 들어오니");
                             exec("sumy " + algorithm + " --length=" + length + " --language=korean --text=" + '"' + text + '"', (error, stdout, stderr) => {
                                 console.log('stdout: ' + stdout);
