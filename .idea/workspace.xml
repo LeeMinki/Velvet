@@ -43,12 +43,12 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="js" value="1940" />
+          <entry key="js" value="2021" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JavaScript" value="1940" />
+          <entry key="JavaScript" value="2021" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.js.language.service.starts">
@@ -63,8 +63,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="326">
-              <caret line="66" column="47" selection-start-line="66" selection-start-column="47" selection-end-line="66" selection-end-column="47" />
+            <state relative-caret-position="385">
+              <caret line="112" column="10" lean-forward="true" selection-start-line="112" selection-start-column="10" selection-end-line="112" selection-end-column="10" />
             </state>
           </provider>
         </entry>
@@ -191,12 +191,12 @@
       <workItem from="1542604141473" duration="37000" />
       <workItem from="1542687537318" duration="634000" />
       <workItem from="1542855918927" duration="1700000" />
-      <workItem from="1542870092826" duration="8729000" />
+      <workItem from="1542870092826" duration="9158000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="16097000" />
+    <option name="totallyTimeSpent" value="16526000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1066" extended-state="6" />
@@ -256,8 +256,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="326">
-          <caret line="66" column="47" selection-start-line="66" selection-start-column="47" selection-end-line="66" selection-end-column="47" />
+        <state relative-caret-position="385">
+          <caret line="112" column="10" lean-forward="true" selection-start-line="112" selection-start-column="10" selection-end-line="112" selection-end-column="10" />
         </state>
       </provider>
     </entry>
