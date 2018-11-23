@@ -51,19 +51,13 @@ function handleEvent(event) {
     if(event.message.type === 'file') {
         console.log("lovebombombombom");
         const pdfStream = fs.createWriteStream(filePath);
-        // event.message.file.pipe(picStream);
         client.getMessageContent(event.message.id)
             .then((stream) => {
                 stream.on('data', (chunk) => {
                     pdfStream.write(chunk);
-                    pdfStream.end();
-                });
-                stream.on('error', (err) => {
-                    console.log(err);
-                });
-                stream.on('finish', () => {
+                }).on('end', () => {
                     // 파일 저장했으니 pdf 추출
-
+                    console.log("lovebombombombomdddaaa");
                     extract(filePath, { splitPages: false }, function (err, text) {
                         if (err) {
                             console.dir(err);
@@ -102,8 +96,10 @@ function handleEvent(event) {
                             });
                         }
                     })
-
-                })
+                });
+                stream.on('error', (err) => {
+                    console.log(err);
+                });
             });
     }
 
