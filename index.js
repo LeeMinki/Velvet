@@ -70,7 +70,7 @@ function handleEvent(event) {
                         for(let i in text) {
                             texts += text[i];
                         }
-
+                        texts = texts.replace(/\"/gi, "'");
                         // text 요약
                         // 한글일 경우
                         if (check.test(texts.substring(0, 10))) {
