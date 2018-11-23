@@ -64,7 +64,7 @@ function handleEvent(event) {
                             return;
                         }
                         // 추출한 text로 text 요약
-
+                        console.log(text);
                         // text 요약
                         // 한글일 경우
                         else if (check.test(text.substring(0, 10))) {
