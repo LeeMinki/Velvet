@@ -58,7 +58,7 @@ function handleEvent(event) {
                 }).on('end', () => {
                     // 파일 저장했으니 pdf 추출
                     console.log("lovebombombombomdddaaa");
-                    extract(filePath, { splitPages: false }, function (err, text) {
+                    extract(filePath, { splitPages: false }, (err, text) => {
                         if (err) {
                             console.dir(err);
                             return;
@@ -67,7 +67,7 @@ function handleEvent(event) {
 
                         // text 요약
                         // 한글일 경우
-                        else if (check.test(event.message.text.substring(0, 10))) {
+                        else if (check.test(text.substring(0, 10))) {
                             console.log("한글 요약 들어오니");
                             exec("sumy " + algorithm + " --length=" + length + " --language=korean --text=" + '"' + text + '"', (error, stdout, stderr) => {
                                 console.log('stdout: ' + stdout);
