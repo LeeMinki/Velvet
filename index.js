@@ -64,13 +64,13 @@ function handleEvent(event) {
                             return;
                         }
                         // 추출한 text로 text 요약
-                        console.log(text);
+                        console.log(text[0]);
 
                         // text 요약
                         // 한글일 경우
-                        if (check.test(text.substring(0, 10))) {
+                        if (check.test(text[0].substring(0, 10))) {
                             console.log("한글 요약 들어오니");
-                            exec("sumy " + algorithm + " --length=" + length + " --language=korean --text=" + '"' + text + '"', (error, stdout, stderr) => {
+                            exec("sumy " + algorithm + " --length=" + length + " --language=korean --text=" + '"' + text[0] + '"', (error, stdout, stderr) => {
                                 console.log('stdout: ' + stdout);
                                 console.log('stderr: ' + stderr);
                                 if (error !== null) {
@@ -84,7 +84,7 @@ function handleEvent(event) {
                         }
                         // 한글 아니면 영어로 처리
                         else {
-                            exec("sumy " + algorithm + " --length=" + length + " --language=en --text=" + '"' + text + '"', (error, stdout, stderr) => {
+                            exec("sumy " + algorithm + " --length=" + length + " --language=en --text=" + '"' + text[0] + '"', (error, stdout, stderr) => {
                                 console.log('stdout: ' + stdout);
                                 console.log('stderr: ' + stderr);
                                 if (error !== null) {
