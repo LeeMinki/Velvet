@@ -73,7 +73,7 @@ function handleEvent(event) {
                         texts = texts.replace(/\"/gi, "'");
                         // text 요약
                         // 한글일 경우
-                        if (check.test(texts.substring(0, 10)) || check.test(texts.substring(10, 20))) {
+                        if (check.test(texts.substring(5, 10))) {
                             console.log("한글 요약 들어오니");
                             exec("sumy " + algorithm + " --length=" + length + " --language=korean --text=" + '"' + texts + '"', (error, stdout, stderr) => {
                                 console.log('stdout: ' + stdout);
