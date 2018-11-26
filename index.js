@@ -129,6 +129,12 @@ function handleEvent(event) {
                 let ret_msg = {type: 'text', text: res_text};
                 return client.replyMessage(event.replyToken, ret_msg);
             }
+            if (event.message.text.substring(1, 5) === "status") {
+                res_text = "algorithm=" + algorithm + "\nlength=" + length;
+                // create a echoing text message
+                let ret_msg = {type: 'text', text: res_text};
+                return client.replyMessage(event.replyToken, ret_msg);
+            }
             if (event.message.text.substring(1, 7) === "update") {
                 exec("cd /home/ubuntu/sumy&&git pull&&python3 setup.py install", (error, stdout, stderr) => {
                     console.log('stdout: ' + stdout);
