@@ -129,7 +129,7 @@ function handleEvent(event) {
                 let ret_msg = {type: 'text', text: res_text};
                 return client.replyMessage(event.replyToken, ret_msg);
             }
-            if (event.message.text.substring(1, 5) === "status") {
+            if (event.message.text.substring(1, 7) === "status") {
                 res_text = "algorithm=" + algorithm + "\nlength=" + length;
                 // create a echoing text message
                 let ret_msg = {type: 'text', text: res_text};
