@@ -13,7 +13,7 @@ app.post('/summary', (req, res) => {
    console.log('post!');
    let inputData = req.body;
    console.log(inputData);
-   res.json("TEST!");
+   res.write("TEST!");
    res.status(200).end();
 });
 
