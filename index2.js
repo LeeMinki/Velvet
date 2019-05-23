@@ -3,9 +3,8 @@
 const express = require('express');
 const app = express();
 const exec = require('child_process').exec;
-const bodyParser = require('body-parser');
 
-app.use(bodyParser().json())
+app.use(express.json());
 
 app.get('/summary', (req, res) => {
   console.log("This is Get");
