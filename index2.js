@@ -5,11 +5,13 @@ const app = express();
 const exec = require('child_process').exec;
 const bodyParser = require('body-parser');
 
-app.get('/summary', (req, res) => {
+app.use(bodyParser().json())
 
+app.get('/summary', (req, res) => {
+  console.log("This is Get");
 });
 app.post('/summary', (req, res) => {
-   console.log('hi!');
+   console.log('post!');
    let inputData = req.body;
    console.log(inputData);
    res.json("TEST!");
