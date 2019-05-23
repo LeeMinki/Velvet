@@ -8,7 +8,7 @@ let algorithm = "text-rank";
 let length = "3";
 let response;
 const check = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
-const regExp = /[^(\(\)\{\}\[\]\/?.,;:|*~`!^\-_+<>@\#$%&\\\=\(\'\"ㄱ-ㅎ|ㅏ-ㅣ|가-힣|A-Za-z|\s)]/gi;
+const regExp = /[^(\(\)\{\}\[\]\/?.,;:|*~`!^\-_+<>@\#$%&\\\=\(\'ㄱ-ㅎ|ㅏ-ㅣ|가-힣|A-Za-z|\s|\n|\r)]/gi;
 
 app.use(express.json());
 
@@ -30,7 +30,7 @@ app.post('/summary', (req, res) => {
      // 잡문자 제거
      // 큰 따옴표를 작은 따옴표로
      text = text.replace(regExp, '');
-     text = text.replace(/\"/gi, "'");
+    //  text = text.replace(/\"/gi, "'");
     //  text = text.replace(/\“/gi, "'");
     //  text = text.replace(/\”/gi, "'");
 
