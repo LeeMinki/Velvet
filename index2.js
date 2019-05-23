@@ -8,7 +8,7 @@ let algorithm = "text-rank";
 let length = "3";
 let response;
 const check = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
-const regExp = /[^(\(\)\{\}\[\]\/?.,;:|*~`!^\-_+<>@\#$%&\\\=\(\'\"ㄱ-ㅎ|ㅏ-ㅣ|가-힣|A-Za-z)]/gi;
+const regExp = /[^(\(\)\{\}\[\]\/?.,;:|*~`!^\-_+<>@\#$%&\\\=\(\'\"ㄱ-ㅎ|ㅏ-ㅣ|가-힣|A-Za-z|\s)]/gi;
 
 app.use(express.json());
 
