@@ -1,13 +1,9 @@
 const express = require('express');
 const app = express();
 
-app.get('/users', (req, res) => {
-   console.log('Conenct');
-});
-
-app.post('/post', (req, res) => {
+app.post('/summary', (req, res) => {
    console.log('who get in here post /users');
-   var inputData;
+   let inputData;
 
    req.on('data', (data) => {
      inputData = JSON.parse(data);
@@ -17,8 +13,7 @@ app.post('/post', (req, res) => {
    req.on('end', () => {
      console.log("Finish");
    });
-
-   res.write("TEST!");
+   res.json(200, "TEST!");
    res.end();
 });
 
