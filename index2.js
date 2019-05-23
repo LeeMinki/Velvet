@@ -25,8 +25,10 @@ app.post('/summary', (req, res) => {
    // text 요약
    if(text.length <= 500) {
       response = "Need more text sizes"
-      res.sendStatus(200).end(response);
+      res.status(200).send(response);
    } else {
+     // 큰 따옴표를 작은 따옴표로
+     text = text.replace(/\"/gi, "'");
      // 한글일 경우
      if(check.test(text.substring(0,100))) {
        console.log("한글 요약" + text);
@@ -37,7 +39,7 @@ app.post('/summary', (req, res) => {
             console.log('exec error: ' + error);
         }
         response = stdout;
-        res.sendStatus(200).end(response);
+        res.status(200).send(response);
     });
      }
      // 영어일 경우
@@ -49,7 +51,7 @@ app.post('/summary', (req, res) => {
             console.log('exec error: ' + error);
         }
         response = stdout;
-        res.sendStatus(200).end(response);
+        res.status(200).send(response);
     });
      }
    }
