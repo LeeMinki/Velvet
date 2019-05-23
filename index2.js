@@ -1,22 +1,23 @@
+'use strict';
+
 const express = require('express');
 const app = express();
+const exec = require('child_process').exec;
+const bodyParser = require('body-parser');
 
+app.get('/summary', (req, res) => {
+
+});
 app.post('/summary', (req, res) => {
-   console.log('who get in here post /users');
-   let inputData;
-
-   req.on('data', (data) => {
-     inputData = JSON.parse(data);
-     console.log(inputData);
-   });
-
-   req.on('end', () => {
-     console.log("Finish");
-   });
-   res.json(200, "TEST!");
-   res.end();
+   console.log('hi!');
+   let inputData = req.body;
+   console.log(inputData);
+   res.json("TEST!");
+   res.status(200).end();
 });
 
-app.listen(3000, () => {
-  console.log('Example app listening on port 3000!');
+// listen on port
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+    console.log(`listening on ${port}`);
 });
