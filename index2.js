@@ -8,8 +8,8 @@ let algorithm = "text-rank";
 let length = "3";
 let response;
 const check = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
+const regExp = /[^(\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"ㄱ-ㅎ|ㅏ-ㅣ|가-힣)]/gi;
 
-// if (check.test(event.message.text.substring(0, 100))) {
 app.use(express.json());
 
 app.get('/summary', (req, res) => {
@@ -28,10 +28,11 @@ app.post('/summary', (req, res) => {
       res.status(200).send(response);
    } else {
      // 큰 따옴표를 작은 따옴표로
+     text = text.replace(regExp, "");
      text = text.replace(/\"/gi, "'");
-     text = text.replace(/\“/gi, "'");
-     text = text.replace(/\”/gi, "'");
-     
+    //  text = text.replace(/\“/gi, "'");
+    //  text = text.replace(/\”/gi, "'");
+
      // 한글일 경우
      if(check.test(text.substring(0,100))) {
        console.log("한글 요약" + text);
