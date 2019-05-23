@@ -29,6 +29,9 @@ app.post('/summary', (req, res) => {
    } else {
      // 큰 따옴표를 작은 따옴표로
      text = text.replace(/\"/gi, "'");
+     text = text.replace(/\“/gi, "'");
+     text = text.replace(/\”/gi, "'");
+     
      // 한글일 경우
      if(check.test(text.substring(0,100))) {
        console.log("한글 요약" + text);
