@@ -25,7 +25,7 @@ app.post('/summary', (req, res) => {
    // text 요약
    if(text.length <= 500) {
       response = "Need more text sizes"
-      res.status(200).send(response);
+      res.statusStatus(200).send(response);
    } else {
      // 한글일 경우
      if(check.test(text.substring(0,100))) {
@@ -37,7 +37,7 @@ app.post('/summary', (req, res) => {
             console.log('exec error: ' + error);
         }
         response = stdout;
-        res.status(200).send(response);
+        res.sendStatus(200).send(response);
     });
      }
      // 영어일 경우
@@ -49,7 +49,7 @@ app.post('/summary', (req, res) => {
             console.log('exec error: ' + error);
         }
         response = stdout;
-        res.send(200).send(response);
+        res.sendStatus(200).send(response);
     });
      }
    }
