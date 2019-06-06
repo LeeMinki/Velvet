@@ -55,7 +55,7 @@ app.post('/summary', (req, res) => {
         if (error !== null) {
             console.log('exec error: ' + error);
         }
-        response = stdout;
+        response = stdout[0];
         res.status(200).send(response);
     });
      }
