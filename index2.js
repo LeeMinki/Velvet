@@ -16,13 +16,11 @@ app.get('/summary', (req, res) => {
   console.log("This is Get");
 });
 app.post('/summary', (req, res) => {
-   console.log('post!');
    let inputData = req.body;
    let text = inputData['text'];
    length = inputData['number'];
    algorithm = inputData['algorithm'];
    console.log(algorithm);
-  //  console.log(text);
 
    // text 요약
    if(text.length <= 500) {
@@ -40,8 +38,8 @@ app.post('/summary', (req, res) => {
      if(check.test(text.substring(0,100))) {
       //  console.log("한글 요약" + text);
        exec("sumy " + algorithm + " --length=" + length + " --language=korean --text=" + '"' + text + '"', (error, stdout, stderr) => {
-        // console.log('stdout: ' + stdout);
-        // console.log('stderr: ' + stderr);
+        console.log('stdout: ' + stdout);
+        console.log('stderr: ' + stderr);
         if (error !== null) {
             console.log('exec error: ' + error);
         }
@@ -52,8 +50,8 @@ app.post('/summary', (req, res) => {
      // 영어일 경우
      else {
       exec("sumy " + algorithm + " --length=" + length + " --language=en --text=" + '"' + text + '"', (error, stdout, stderr) => {
-        // console.log('stdout: ' + stdout);
-        // console.log('stderr: ' + stderr);
+        console.log('stdout: ' + stdout);
+        console.log('stderr: ' + stderr);
         if (error !== null) {
             console.log('exec error: ' + error);
         }
