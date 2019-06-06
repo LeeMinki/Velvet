@@ -44,11 +44,8 @@ app.post('/summary', (req, res) => {
             console.log('exec error: ' + error);
         }
         response = stdout;
-        res.writeHead(200, {"Content-Type":"text/plain"});
-        res.write(response);
-        res.end();
-        // res.set({'content-type': 'text/html'});
-        // res.status(200).send(response);
+        res.set({'content-type': 'text/plain'});
+        res.status(200).send(response);
     });
      }
      // 영어일 경우
@@ -60,11 +57,8 @@ app.post('/summary', (req, res) => {
             console.log('exec error: ' + error);
         }
         response = stdout;
-        res.writeHead(200, {"Content-Type":"text/plain"});
-        res.write(response);
-        res.end();
-        // res.set({'content-type': 'text/html'});
-        // res.status(200).send(response);
+        res.set({'content-type': 'text/plain'});
+        res.status(200).send(response);
     });
      }
    }
