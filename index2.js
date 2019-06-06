@@ -44,7 +44,7 @@ app.post('/summary', (req, res) => {
             console.log('exec error: ' + error);
         }
         response = stdout;
-        res.set({ 'content-type': 'application/json; charset=utf-8' });
+        res.set({ 'content-type': 'text/plain' });
         res.status(200).send(response);
     });
      }
@@ -57,7 +57,7 @@ app.post('/summary', (req, res) => {
             console.log('exec error: ' + error);
         }
         response = stdout;
-        res.set({ 'content-type': 'application/json; charset=utf-8' });
+        res.set({ 'content-type': 'text/plain' });
         res.status(200).send(response);
     });
      }
