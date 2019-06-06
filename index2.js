@@ -4,7 +4,7 @@ const express = require('express');
 const app = express();
 const exec = require('child_process').exec;
 const algor_select= ["luhn" , "edmundson ", "lsa", "text-rank", "lex-rank", "sum-basic", "kl"];
-let algorithm = "text-rank";
+let algorithm = "luhn";
 let length = "3";
 let response;
 const check = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
