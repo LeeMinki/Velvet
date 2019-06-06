@@ -21,7 +21,8 @@ app.post('/summary', (req, res) => {
    let text = inputData['text'];
    length = inputData['number'];
    algorithm = inputData['algorithm'];
-   console.log(text);
+   console.log(algorithm);
+  //  console.log(text);
 
    // text 요약
    if(text.length <= 500) {
@@ -37,10 +38,10 @@ app.post('/summary', (req, res) => {
 
      // 한글일 경우
      if(check.test(text.substring(0,100))) {
-       console.log("한글 요약" + text);
+      //  console.log("한글 요약" + text);
        exec("sumy " + algorithm + " --length=" + length + " --language=korean --text=" + '"' + text + '"', (error, stdout, stderr) => {
-        console.log('stdout: ' + stdout);
-        console.log('stderr: ' + stderr);
+        // console.log('stdout: ' + stdout);
+        // console.log('stderr: ' + stderr);
         if (error !== null) {
             console.log('exec error: ' + error);
         }
@@ -51,8 +52,8 @@ app.post('/summary', (req, res) => {
      // 영어일 경우
      else {
       exec("sumy " + algorithm + " --length=" + length + " --language=en --text=" + '"' + text + '"', (error, stdout, stderr) => {
-        console.log('stdout: ' + stdout);
-        console.log('stderr: ' + stderr);
+        // console.log('stdout: ' + stdout);
+        // console.log('stderr: ' + stderr);
         if (error !== null) {
             console.log('exec error: ' + error);
         }
