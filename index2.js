@@ -44,7 +44,7 @@ app.post('/summary', (req, res) => {
             console.log('exec error: ' + error);
         }
         response = stdout;
-        res.writeHead(200, {"Content-Type":"text/plian"});
+        res.writeHead(200, {"Content-Type":"text/plain"});
         res.write(response);
         res.end();
         // res.set({'content-type': 'text/html'});
@@ -60,7 +60,7 @@ app.post('/summary', (req, res) => {
             console.log('exec error: ' + error);
         }
         response = stdout;
-        res.writeHead(200, {"Content-Type":"text/plian"});
+        res.writeHead(200, {"Content-Type":"text/plain"});
         res.write(response);
         res.end();
         // res.set({'content-type': 'text/html'});
