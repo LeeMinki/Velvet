@@ -20,6 +20,7 @@ app.post('/summary', (req, res) => {
    let inputData = req.body;
    let text = inputData['text'];
    length = inputData['number'];
+   algorithm = inputData['algorithm'];
    console.log(text);
 
    // text 요약
